@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH
+#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH && !MONODROID
 using System.Data.Linq;
 #endif
-#if !SILVERLIGHT && !MONOTOUCH
+#if !SILVERLIGHT && !MONOTOUCH && !MONODROID
 using System.Data.SqlTypes;
 #endif
 using System.Linq;
@@ -24,7 +24,7 @@ namespace Newtonsoft.Json.Tests.Converters
       public byte[] NullByteArray { get; set; }
     }
 
-#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH
+#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH && !MONODROID
     [Test]
     public void DeserializeBinaryClass()
     {
@@ -76,7 +76,7 @@ namespace Newtonsoft.Json.Tests.Converters
 }", json);
     }
 
-#if !SILVERLIGHT && !MONOTOUCH
+#if !SILVERLIGHT && !MONOTOUCH && !MONODROID
     public class SqlBinaryClass
     {
       public SqlBinary SqlBinary { get; set; }

@@ -25,7 +25,7 @@
 
 using System;
 using System.Collections.Generic;
-#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH
+#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH && !MONODROID
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Web.Script.Serialization;
@@ -41,7 +41,7 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using Newtonsoft.Json.Converters;
-#if !PocketPC && !NET20 && !WINDOWS_PHONE && !MONOTOUCH
+#if !PocketPC && !NET20 && !WINDOWS_PHONE && !MONOTOUCH && !MONODROID
 using System.Runtime.Serialization.Json;
 #endif
 using Newtonsoft.Json.Tests.TestObjects;
@@ -149,7 +149,7 @@ namespace Newtonsoft.Json.Tests.Serialization
 
       string jsonText = JsonConvert.SerializeObject(testDictionary);
 
-#if !PocketPC && !NET20 && !WINDOWS_PHONE && !MONOTOUCH
+#if !PocketPC && !NET20 && !WINDOWS_PHONE && !MONOTOUCH && !MONODROID
       MemoryStream ms = new MemoryStream();
       DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Dictionary<string, object>));
       serializer.WriteObject(ms, testDictionary);
@@ -409,7 +409,7 @@ keyword such as type of business.""
       CollectionAssert.AreEqual(r1, r2);
     }
 
-#if !PocketPC && !NET20 && !WINDOWS_PHONE && !MONOTOUCH
+#if !PocketPC && !NET20 && !WINDOWS_PHONE && !MONOTOUCH && !MONODROID
     [Test]
     public void Unicode()
     {
@@ -1363,7 +1363,7 @@ keyword such as type of business.""
       Assert.AreEqual("titleId", n.FidOrder[n.FidOrder.Count - 1]);
     }
 
-#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH
+#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH && !MONODROID
     [MetadataType(typeof(OptInClassMetadata))]
     public class OptInClass
     {
@@ -2374,7 +2374,7 @@ keyword such as type of business.""
       public string Ethnicity { get; set; }
     }
 
-#if !NET20 && !PocketPC && !WINDOWS_PHONE && !MONOTOUCH
+#if !NET20 && !PocketPC && !WINDOWS_PHONE && !MONOTOUCH && !MONODROID
     public class DataContractJsonSerializerTestClass
     {
       public TimeSpan TimeSpanProperty { get; set; }

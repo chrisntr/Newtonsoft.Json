@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH
+#if !SILVERLIGHT && !PocketPC && !NET20 && !MONOTOUCH && !MONODROID
 using System.Data.Linq;
 #endif
-#if !SILVERLIGHT && !MONOTOUCH
+#if !SILVERLIGHT && !MONOTOUCH && !MONODROID
 using System.Data.SqlTypes;
 #endif
 using System.IO;
@@ -38,23 +38,23 @@ namespace Newtonsoft.Json.Tests.Converters
 }", json);
     }
 
-//    [Test]
-//    public void SerializeToBson()
-//    {
-//      Regex regex = new Regex("abc", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-//
-//      MemoryStream ms = new MemoryStream();
-//      BsonWriter writer = new BsonWriter(ms);
-//      JsonSerializer serializer = new JsonSerializer();
-//      serializer.Converters.Add(new RegexConverter());
-//
-//      serializer.Serialize(writer, new RegexTestClass { Regex = regex });
-//
-//      string expected = "13-00-00-00-0B-52-65-67-65-78-00-61-62-63-00-69-75-00-00";
-//      string bson = MiscellaneousUtils.BytesToHex(ms.ToArray());
-//
-//      Assert.AreEqual(expected, bson);
-//    }
+    [Test]
+    public void SerializeToBson()
+    {
+        Regex regex = new Regex("abc", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        MemoryStream ms = new MemoryStream();
+        BsonWriter writer = new BsonWriter(ms);
+        JsonSerializer serializer = new JsonSerializer();
+        serializer.Converters.Add(new RegexConverter());
+
+        serializer.Serialize(writer, new RegexTestClass { Regex = regex });
+
+        string expected = "13-00-00-00-0B-52-65-67-65-78-00-61-62-63-00-69-75-00-00";
+        string bson = MiscellaneousUtils.BytesToHex(ms.ToArray());
+
+        Assert.AreEqual(expected, bson);
+    }
 
     [Test]
     public void DeserializeFromText()
@@ -69,19 +69,19 @@ namespace Newtonsoft.Json.Tests.Converters
       Assert.AreEqual(RegexOptions.IgnoreCase | RegexOptions.CultureInvariant, newRegex.Options);
     }
 
-//    [Test]
-//    public void DeserializeFromBson()
-//    {
-//      MemoryStream ms = new MemoryStream(MiscellaneousUtils.HexToBytes("13-00-00-00-0B-52-65-67-65-78-00-61-62-63-00-69-75-00-00"));
-//      BsonReader reader = new BsonReader(ms);
-//      JsonSerializer serializer = new JsonSerializer();
-//      serializer.Converters.Add(new RegexConverter());
-//
-//      RegexTestClass c = serializer.Deserialize<RegexTestClass>(reader);
-//
-//      Assert.AreEqual("abc", c.Regex.ToString());
-//      Assert.AreEqual(RegexOptions.IgnoreCase, c.Regex.Options);
-//    }
+    [Test]
+    public void DeserializeFromBson()
+    {
+        MemoryStream ms = new MemoryStream(MiscellaneousUtils.HexToBytes("13-00-00-00-0B-52-65-67-65-78-00-61-62-63-00-69-75-00-00"));
+        BsonReader reader = new BsonReader(ms);
+        JsonSerializer serializer = new JsonSerializer();
+        serializer.Converters.Add(new RegexConverter());
+
+        RegexTestClass c = serializer.Deserialize<RegexTestClass>(reader);
+
+        Assert.AreEqual("abc", c.Regex.ToString());
+        Assert.AreEqual(RegexOptions.IgnoreCase, c.Regex.Options);
+    }
 
     [Test]
     public void ConvertEmptyRegexBson()
@@ -105,34 +105,34 @@ namespace Newtonsoft.Json.Tests.Converters
       Assert.AreEqual(RegexOptions.None, c.Regex.Options);
     }
 
-//    [Test]
-//    public void ConvertRegexWithAllOptionsBson()
-//    {
-//      Regex regex = new Regex(
-//        "/",
-//        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
-//
-//      MemoryStream ms = new MemoryStream();
-//      BsonWriter writer = new BsonWriter(ms);
-//      JsonSerializer serializer = new JsonSerializer();
-//      serializer.Converters.Add(new RegexConverter());
-//
-//      serializer.Serialize(writer, new RegexTestClass { Regex = regex });
-//
-//      string expected = "14-00-00-00-0B-52-65-67-65-78-00-2F-00-69-6D-73-75-78-00-00";
-//      string bson = MiscellaneousUtils.BytesToHex(ms.ToArray());
-//
-//      Assert.AreEqual(expected, bson);
-//
-//      ms.Seek(0, SeekOrigin.Begin);
-//      BsonReader reader = new BsonReader(ms);
-//      serializer.Converters.Add(new RegexConverter());
-//
-//      RegexTestClass c = serializer.Deserialize<RegexTestClass>(reader);
-//
-//      Assert.AreEqual("/", c.Regex.ToString());
-//      Assert.AreEqual(RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.ExplicitCapture, c.Regex.Options);
-//    }
+    [Test]
+    public void ConvertRegexWithAllOptionsBson()
+    {
+        Regex regex = new Regex(
+          "/",
+          RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.ExplicitCapture);
+
+        MemoryStream ms = new MemoryStream();
+        BsonWriter writer = new BsonWriter(ms);
+        JsonSerializer serializer = new JsonSerializer();
+        serializer.Converters.Add(new RegexConverter());
+
+        serializer.Serialize(writer, new RegexTestClass { Regex = regex });
+
+        string expected = "14-00-00-00-0B-52-65-67-65-78-00-2F-00-69-6D-73-75-78-00-00";
+        string bson = MiscellaneousUtils.BytesToHex(ms.ToArray());
+
+        Assert.AreEqual(expected, bson);
+
+        ms.Seek(0, SeekOrigin.Begin);
+        BsonReader reader = new BsonReader(ms);
+        serializer.Converters.Add(new RegexConverter());
+
+        RegexTestClass c = serializer.Deserialize<RegexTestClass>(reader);
+
+        Assert.AreEqual("/", c.Regex.ToString());
+        Assert.AreEqual(RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.ExplicitCapture, c.Regex.Options);
+    }
 
     [Test]
     public void ConvertEmptyRegexJson()
