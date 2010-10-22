@@ -127,7 +127,7 @@ namespace Newtonsoft.Json.Linq
 #if !(SILVERLIGHT || MONODROID || MONOTOUCH)
       OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, IndexOfItem(childProperty)));
 #endif
-#if SILVERLIGHT || !(NET20 || NET35)
+#if !MONOTOUCH && SILVERLIGHT || !(NET20 || NET35)
       OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, childProperty, childProperty, IndexOfItem(childProperty)));
 #endif
     }

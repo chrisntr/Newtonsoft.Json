@@ -92,8 +92,12 @@ namespace Newtonsoft.Json.Serialization
 #endif
         new BsonObjectIdConverter()
       };
-
+#if MONOTOUCH
+		
+    private readonly ThreadSafeStore<Type, JsonContract> _typeContractCache;
+#else
     private static Dictionary<ResolverContractKey, JsonContract> _sharedContractCache;
+#endif
     private static readonly object _typeContractCacheLock = new object();
 
     private Dictionary<ResolverContractKey, JsonContract> _instanceContractCache;
@@ -146,8 +150,13 @@ namespace Newtonsoft.Json.Serialization
     {
       DefaultMembersSearchFlags = BindingFlags.Public | BindingFlags.Instance;
       _sharedCache = shareCache;
+			
+#if MONOTOUCH
+      _typeContractCache = new ThreadSafeStore<Type, JsonContract>(CreateContract);
+#endif
+			
     }
-
+#if !MONOTOUCH
     private Dictionary<ResolverContractKey, JsonContract> GetCache()
     {
       if (_sharedCache)
@@ -163,6 +172,7 @@ namespace Newtonsoft.Json.Serialization
       else
         _instanceContractCache = cache;
     }
+#endif
 
     /// <summary>
     /// Resolves the contract for a given type.
@@ -173,29 +183,32 @@ namespace Newtonsoft.Json.Serialization
     {
       if (type == null)
         throw new ArgumentNullException("type");
-
+			
+#if MONOTOUCH
+				return _typeContractCache.Get(type);
+#else
       JsonContract contract;
       ResolverContractKey key = new ResolverContractKey(GetType(), type);
       Dictionary<ResolverContractKey, JsonContract> cache = GetCache();
       if (cache == null || !cache.TryGetValue(key, out contract))
       {
         contract = CreateContract(type);
-
         // avoid the possibility of modifying the cache dictionary while another thread is accessing it
         lock (_typeContractCacheLock)
         {
-          cache = GetCache();
+          cache = GetCache();	
           Dictionary<ResolverContractKey, JsonContract> updatedCache =
             (cache != null)
               ? new Dictionary<ResolverContractKey, JsonContract>(cache)
               : new Dictionary<ResolverContractKey, JsonContract>();
           updatedCache[key] = contract;
-
           UpdateCache(updatedCache);
         }
-      }
-
+      }	
+      
+			}
       return contract;
+#endif
     }
 
     /// <summary>

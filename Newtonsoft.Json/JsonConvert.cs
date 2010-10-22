@@ -715,11 +715,9 @@ namespace Newtonsoft.Json
       JsonSerializer jsonSerializer = JsonSerializer.Create(settings);
 
       object deserializedValue;
-
       using (JsonReader jsonReader = new JsonTextReader(sr))
       {
         deserializedValue = jsonSerializer.Deserialize(jsonReader, type);
-
         if (jsonReader.Read() && jsonReader.TokenType != JsonToken.Comment)
           throw new JsonSerializationException("Additional text found in JSON string after finishing deserializing object.");
       }
